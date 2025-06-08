@@ -18,7 +18,7 @@ const fetchSlides = async (): Promise<string[]> => {
         return TempImages;
     }
     try {
-        return imagePaths.map((item: { filename: string; path: string }) => item.path); // Extract paths
+        return imagePaths.map((item: { filename: string }) => `http://localhost:3000/images/${item.filename}`); // Construct server URLs
     }
     catch (error) {
         console.error("Error fetching slides:", error);
@@ -32,6 +32,13 @@ const RemovedNotification = () => toast.error('Image removed');
 const Carousel: Component = () => {
     const [images] = createResource<string[]>(fetchSlides) || [];
     const [currentIndex, setCurrentIndex] = createSignal(0);
+
+    const getVisibleImages = () => {
+        const totalImages = images()?.length ?? 0;
+        const start = Math.max(0, currentIndex() - 2); // Load 2 images before the current
+        const end = Math.min(totalImages, currentIndex() + 3); // Load 3 images after the current
+        return images()?.slice(start, end) ?? [];
+    };
 
     const nextSlide = () => {
         if (currentIndex() + 1 < (images()?.length ?? 1)) {
@@ -84,7 +91,7 @@ const Carousel: Component = () => {
     return (
         <div class="h-screen overflow-clip">
             <div class="carousel h-full w-full">
-                {(images() ?? []).map((src, index) => (
+                {getVisibleImages().map((src, index) => (
                 <div
                     id={`slide${index + 1}`}
                     class={`carousel-item relative w-full ${index === currentIndex() ? "block" : "hidden"}`}
