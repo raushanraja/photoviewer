@@ -1,0 +1,10 @@
+[
+    {
+        "filename": "image1.jpg",
+        "path": "https://picsum.photos/1920/1080?random=1"
+    },
+    {
+        "filename": "image2.jpg",
+        "path": "https://picsum.photos/1920/1080?random=2"
+    }
+]
