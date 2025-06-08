@@ -91,15 +91,18 @@ const Carousel: Component = () => {
     return (
         <div class="h-screen overflow-clip">
             <div class="carousel h-full w-full">
-                {getVisibleImages().map((src, index) => (
-                <div
-                    id={`slide${index + 1}`}
-                    class={`carousel-item relative w-full ${index === currentIndex() ? "block" : "hidden"}`}
-                >
-                    <img src={src} class="h-full w-full object-center object-contain" alt="PhotoViewer" />
-                </div>
-            ))}
-        </div>
+                {getVisibleImages().map((src, index) => {
+                    const globalIndex = Math.max(0, currentIndex() - 2) + index; // Map local index to global index
+                    return (
+                        <div
+                            id={`slide${globalIndex + 1}`}
+                            class={`carousel-item relative w-full ${globalIndex === currentIndex() ? "block" : "hidden"}`}
+                        >
+                            <img src={src} class="h-full w-full object-center object-contain" alt="PhotoViewer" />
+                        </div>
+                    );
+                })}
+            </div>
             <div class="absolute left-5 right-5 top-[540px] flex justify-between">
                 <button onClick={prevSlide} class="btn btn-circle" aria-label="Previous Slide">❮</button>
                 <button onClick={nextSlide} class="btn btn-circle" aria-label="Next Slide" disabled={currentIndex() + 1 === images()?.length}>❯</button>
